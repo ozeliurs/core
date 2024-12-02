@@ -38,8 +38,6 @@ jobs:
           file: dockerfiles/Dockerfile.ospf-mdr-rpm
           push: true
           tags: ghcr.io/${{ github.repository }}:ospf-mdr-rpm
-          build-args: |
-            FROM_IMAGE=ghcr.io/${{ github.repository }}:emane-python
 
       - name: Build and push rocky image
         uses: docker/build-push-action@v2
@@ -48,8 +46,6 @@ jobs:
           file: dockerfiles/Dockerfile.rocky
           push: true
           tags: ghcr.io/${{ github.repository }}:rocky
-          build-args: |
-            FROM_IMAGE=ghcr.io/${{ github.repository }}:ospf-mdr-rpm
 
       - name: Build and push ospf-mdr-deb image
         uses: docker/build-push-action@v2
@@ -58,8 +54,6 @@ jobs:
           file: dockerfiles/Dockerfile.ospf-mdr-deb
           push: true
           tags: ghcr.io/${{ github.repository }}:ospf-mdr-deb
-          build-args: |
-            FROM_IMAGE=ghcr.io/${{ github.repository }}:emane-python
 
       - name: Build and push ubuntu image
         uses: docker/build-push-action@v2
@@ -68,5 +62,3 @@ jobs:
           file: dockerfiles/Dockerfile.ubuntu
           push: true
           tags: ghcr.io/${{ github.repository }}:ubuntu
-          build-args: |
-            FROM_IMAGE=ghcr.io/${{ github.repository }}:ospf-mdr-deb
