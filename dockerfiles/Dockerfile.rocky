@@ -75,7 +75,7 @@ RUN yum update -y && \
 
 # install emane python bindings
 ARG VENV_PATH=/opt/core/venv
-COPY --from=core:emane-python /opt/emane-*.whl .
+COPY --from=ghcr.io/ozeliurs/core:emane-python /opt/emane-*.whl .
 RUN ${VENV_PATH}/bin/python -m pip install ./emane-*.whl
 
 WORKDIR /root

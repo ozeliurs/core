@@ -21,7 +21,7 @@ RUN apt-get update -y && \
     rm -rf /var/lib/apt/lists/*
 
 # install ospf mdr
-COPY --from=core:ospf-deb /opt/quagga-mr_0.99*.deb .
+COPY --from=ghcr.io/ozeliurs/core:ospf-deb /opt/quagga-mr_0.99*.deb .
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
     ./quagga-mr_0.99*.deb && \
@@ -56,7 +56,7 @@ RUN apt-get update -y && \
 
 # install emane python bindings
 ARG VENV_PATH=/opt/core/venv
-COPY --from=core:emane-python /opt/emane-*.whl .
+COPY --from=ghcr.io/ozeliurs/core:emane-python /opt/emane-*.whl .
 RUN ${VENV_PATH}/bin/python -m pip install ./emane-*.whl
 
 WORKDIR /root
