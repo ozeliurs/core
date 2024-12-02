@@ -21,7 +21,7 @@ RUN apt-get update -y && \
     rm -rf /var/lib/apt/lists/*
 
 # install ospf mdr
-COPY --from=ghcr.io/ozeliurs/core:ospf-deb /opt/quagga-mr_0.99*.deb .
+COPY --from=ghcr.io/ozeliurs/core:ospf-mdr-deb /opt/quagga-mr_0.99*.deb .
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
     ./quagga-mr_0.99*.deb && \
