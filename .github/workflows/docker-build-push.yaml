@@ -6,14 +6,29 @@ on:
       - master
 
 jobs:
-  build-and-push-emane-python:
+  setup:
     runs-on: ubuntu-latest
+    outputs:
+      setup: ${{ steps.setup.outputs.setup }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
+        id: setup
         uses: docker/setup-buildx-action@v1
+        with:
+          driver-opts: image=moby/buildkit:master
+
+  build-and-push-emane-python:
+    runs-on: ubuntu-latest
+    needs: setup
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v1
@@ -26,19 +41,20 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: dockerfiles/Dockerfile.emane-python
+          file: dockerfiles/Dockerfile.${{ matrix.arch }}.emane-python
+          platforms: linux/${{ matrix.arch }}
           push: true
-          tags: ghcr.io/${{ github.repository }}:emane-python
+          tags: ghcr.io/${{ github.repository }}:emane-python-${{ matrix.arch }}
 
   build-and-push-ospf-mdr-rpm:
     runs-on: ubuntu-latest
-    needs: build-and-push-emane-python
+    needs: [setup, build-and-push-emane-python]
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v1
@@ -51,19 +67,20 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: dockerfiles/Dockerfile.ospf-mdr-rpm
+          file: dockerfiles/Dockerfile.${{ matrix.arch }}.ospf-mdr-rpm
+          platforms: linux/${{ matrix.arch }}
           push: true
-          tags: ghcr.io/${{ github.repository }}:ospf-mdr-rpm
+          tags: ghcr.io/${{ github.repository }}:ospf-mdr-rpm-${{ matrix.arch }}
 
   build-and-push-ospf-mdr-deb:
     runs-on: ubuntu-latest
-    needs: build-and-push-emane-python
+    needs: [setup, build-and-push-emane-python]
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v1
@@ -76,19 +93,20 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: dockerfiles/Dockerfile.ospf-mdr-deb
+          file: dockerfiles/Dockerfile.${{ matrix.arch }}.ospf-mdr-deb
+          platforms: linux/${{ matrix.arch }}
           push: true
-          tags: ghcr.io/${{ github.repository }}:ospf-mdr-deb
+          tags: ghcr.io/${{ github.repository }}:ospf-mdr-deb-${{ matrix.arch }}
 
   build-and-push-rocky:
     runs-on: ubuntu-latest
-    needs: build-and-push-ospf-mdr-rpm
+    needs: [setup, build-and-push-ospf-mdr-rpm]
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v1
@@ -101,19 +119,20 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: dockerfiles/Dockerfile.rocky
+          file: dockerfiles/Dockerfile.${{ matrix.arch }}.rocky
+          platforms: linux/${{ matrix.arch }}
           push: true
-          tags: ghcr.io/${{ github.repository }}:rocky
+          tags: ghcr.io/${{ github.repository }}:rocky-${{ matrix.arch }}
 
   build-and-push-ubuntu:
     runs-on: ubuntu-latest
-    needs: build-and-push-ospf-mdr-deb
+    needs: [setup, build-and-push-ospf-mdr-deb]
+    strategy:
+      matrix:
+        arch: [amd64, arm64]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v1
@@ -126,6 +145,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: dockerfiles/Dockerfile.ubuntu
+          file: dockerfiles/Dockerfile.${{ matrix.arch }}.ubuntu
+          platforms: linux/${{ matrix.arch }}
           push: true
-          tags: ghcr.io/${{ github.repository }}:ubuntu
+          tags: ghcr.io/${{ github.repository }}:ubuntu-${{ matrix.arch }}
