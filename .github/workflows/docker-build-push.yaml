@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: core/dockerfiles/Dockerfile.emane-python
+          file: dockerfiles/Dockerfile.emane-python
           push: true
           tags: ghcr.io/${{ github.repository }}:emane-python
 
@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: core/dockerfiles/Dockerfile.ospf-mdr-rpm
+          file: dockerfiles/Dockerfile.ospf-mdr-rpm
           push: true
           tags: ghcr.io/${{ github.repository }}:ospf-mdr-rpm
           build-args: |
@@ -45,7 +45,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: core/dockerfiles/Dockerfile.rocky
+          file: dockerfiles/Dockerfile.rocky
           push: true
           tags: ghcr.io/${{ github.repository }}:rocky
           build-args: |
@@ -55,7 +55,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: core/dockerfiles/Dockerfile.ospf-mdr-deb
+          file: dockerfiles/Dockerfile.ospf-mdr-deb
           push: true
           tags: ghcr.io/${{ github.repository }}:ospf-mdr-deb
           build-args: |
@@ -65,7 +65,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: core/dockerfiles/Dockerfile.ubuntu
+          file: dockerfiles/Dockerfile.ubuntu
           push: true
           tags: ghcr.io/${{ github.repository }}:ubuntu
           build-args: |
